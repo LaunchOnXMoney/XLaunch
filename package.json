@@ -1,0 +1,8 @@
+{
+  "name": "xlaunch-browser-tests",
+  "private": true,
+  "description": "Browser verification tools for the Rust XLaunch backend",
+  "devDependencies": {
+    "playwright": "1.59.0"
+  }
+}

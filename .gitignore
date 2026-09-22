@@ -1,0 +1,52 @@
+# Build outputs and dependency caches
+/target/
+/node_modules/
+/coverage/
+__pycache__/
+*.pyc
+.venv/
+
+# Private configuration; only the empty template is public
+.env
+.env.*
+*.env
+!.env.example
+.npmrc
+
+# Durable state, browser sessions, captures, and generated test evidence
+/var/
+/secrets/
+/captures/
+/docs/verification/web/
+/docs/verification/surfpool/
+/docs/verification/sol-presale/
+/frontend/uploads/
+*.har
+*.har.*
+*.jsonl
+*.log
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.db
+*.pem
+*.key
+*.p12
+*.pfx
+*keypair*.json
+*wallet*.json
+*credentials*.json
+cloudflared*.json
+
+# Original design archives and editor files
+*.zip
+.thumbnail
+.DS_Store
+*.swp
+*.tmp
+
+# Operator-only controls are kept outside this distribution
+/admin/
+/src/web/admin.rs
+/docs/admin.md
+/tools/test_admin_*

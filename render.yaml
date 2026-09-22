@@ -1,0 +1,27 @@
+# The site is exported by `export_static_site` and committed under public/, so
+# Render serves it without building. See docs/deployment.md for why, and for the
+# command to regenerate it when the frontend or the API hostname changes.
+services:
+  - type: web
+    name: xlaunch
+    runtime: static
+    staticPublishPath: ./public
+    buildCommand: ""
+    pullRequestPreviewsEnabled: false
+    headers:
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+    routes:
+      - type: rewrite
+        source: /explore
+        destination: /explore/index.html
+      - type: rewrite
+        source: /deploy
+        destination: /deploy/index.html
+      - type: rewrite
+        source: /how-it-works
+        destination: /how-it-works/index.html

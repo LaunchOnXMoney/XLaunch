@@ -1,0 +1,13 @@
+# Template for /etc/cloudflared/config.yml. Replace TUNNEL_UUID and the hostname
+# with the values printed by `cloudflared tunnel create`. The credentials file is
+# a secret: keep it in /etc/cloudflared, never in this repository.
+tunnel: TUNNEL_UUID
+credentials-file: /etc/cloudflared/TUNNEL_UUID.json
+# Only this one origin is published. Everything else is refused.
+ingress:
+  - hostname: API_HOSTNAME
+    service: http://127.0.0.1:YOUR_API_PORT
+    originRequest:
+      connectTimeout: 10s
+      noHappyEyeballs: true
+  - service: http_status:404

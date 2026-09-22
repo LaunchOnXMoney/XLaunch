@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>window.xlaunchApiBase="";
+window.__resources = {
+  'https://unpkg.com/react@18.3.1/umd/react.production.min.js': '/vendor/react.production.min.js',
+  'https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js': '/vendor/react-dom.production.min.js'
+};
+window.xlaunchCopy = async function(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  const input = document.createElement('textarea');
+  input.value = text; input.style.position = 'fixed'; input.style.opacity = '0';
+  document.body.appendChild(input); input.select();
+  const copied = document.execCommand('copy'); input.remove();
+  if (!copied) throw new Error('Clipboard copy was not available.');
+};
+
+// Header links shared by every page, derived from /api/config so no page hardcodes a URL.
+window.xlaunchSiteLinks = function(config) {
+  const handle = (config && config.receiver_handle) || '';
+  const github = (config && config.github_url) || '';
+  return {
+    receiverHandle: handle || '@LaunchOnXMoney',
+    hasXProfile: !!handle,
+    xProfileUrl: handle ? 'https://x.com/' + handle.replace(/^@/, '') : '',
+    hasGithub: !!github,
+    githubUrl: github
+  };
+};
+
+// Backend origin. Empty means same-origin, which is how the Rust server serves
+// these pages. The static export injects the tunnel origin ahead of this file.
+window.xlaunchApiBase = window.xlaunchApiBase || '';
+window.xlaunchApi = function(path) {
+  if (typeof path !== 'string' || !path.startsWith('/')) return path;
+  return window.xlaunchApiBase + path;
+};
+</script><script src="/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html,body{margin:0;background:#000;color:#E7E9EA;font-family:TwitterChirp,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#8ECDFF;text-decoration:none}a:hover{text-decoration:underline;color:#8ECDFF}
+input,button{font-family:inherit}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-gutter:stable}
+.top-bar{position:sticky;top:0;z-index:50;background:#000}
+@media (max-width:900px){.top-nav{display:none !important}}
+.glass,.glass-card,.glass-input{position:relative}
+.glass{background:rgba(255,255,255,.03);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.glass-card{background:rgba(255,255,255,.02);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.glass-input{background:rgba(0,0,0,.5)}
+.glass::before,.glass-card::before,.glass-input::before{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:rgba(190,225,255,.85);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none;box-shadow:0 0 6px rgba(142,205,255,.55),inset 0 0 6px rgba(142,205,255,.35)}
+.glass-input:focus-within::before{background:#8ECDFF}
+.glass-input.is-error::before{background:#F4212E}
+</style>
+</helmet>
+<div data-screen-label="Deploy" style="min-height:100vh;background:#000;padding:0 28px 60px;max-width:1440px;margin:0 auto">
+  <div class="top-bar" style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:64px;gap:16px;flex:none">
+    <a href="/" style="display:flex;align-items:center;gap:10px;color:#E7E9EA;text-decoration:none;justify-self:start" style-hover="text-decoration:none">
+      <img src="/logo-glass.png" alt="" style="width:40px;height:40px;display:block;object-fit:contain">
+      <span style="font-size:20px;font-weight:800;letter-spacing:-0.3px;white-space:nowrap">XLaunch</span>
+    </a>
+    <nav class="glass top-nav" style="display:flex;align-items:center;gap:4px;height:44px;padding:0 6px;border:0;border-radius:9999px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 24px rgba(29,155,240,.08)">
+      <a href="/deploy" style="display:flex;align-items:center;height:34px;padding:0 16px;border-radius:9999px;color:#8B98A5;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap" style-hover="background:rgba(142,205,255,.10);color:#E7E9EA;text-decoration:none">Deploy</a>
+      <a href="/explore" style="display:flex;align-items:center;height:34px;padding:0 16px;border-radius:9999px;color:#8B98A5;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap" style-hover="background:rgba(142,205,255,.10);color:#E7E9EA;text-decoration:none">Explore</a>
+      <a href="/how-it-works" style="display:flex;align-items:center;height:34px;padding:0 16px;border-radius:9999px;color:#8B98A5;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap" style-hover="background:rgba(142,205,255,.10);color:#E7E9EA;text-decoration:none">How It Works</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:8px;justify-self:end">
+      <sc-if value="{{ hasXProfile }}" hint-placeholder-val="{{ true }}">
+        <a href="{{ xProfileUrl }}" target="_blank" rel="noopener noreferrer" title="Open on X" aria-label="Open on X" class="glass" style="width:40px;height:40px;border-radius:50%;border:0;display:flex;align-items:center;justify-content:center;color:#E7E9EA;flex:none" style-hover="background:rgba(142,205,255,.10)"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg></a>
+      </sc-if>
+      <sc-if value="{{ hasGithub }}" hint-placeholder-val="{{ true }}">
+        <a href="{{ githubUrl }}" target="_blank" rel="noopener noreferrer" title="Open on GitHub" aria-label="Open on GitHub" class="glass" style="width:40px;height:40px;border-radius:50%;border:0;display:flex;align-items:center;justify-content:center;color:#E7E9EA;flex:none" style-hover="background:rgba(142,205,255,.10)"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg></a>
+      </sc-if>
+      <a href="/deploy" style="display:inline-flex;align-items:center;height:40px;padding:0 20px;border-radius:9999px;background:#EFF3F4;color:#0F1419;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;flex:none;box-shadow:0 0 24px rgba(142,205,255,.25)" style-hover="background:#fff;text-decoration:none">Launch Coin</a>
+    </div>
+  </div>
+
+  <div style="max-width:960px;margin:24px auto 0">
+    <div style="font-size:36px;font-weight:800;letter-spacing:-0.8px;line-height:1.1">Deploy a coin.</div>
+    <div style="font-size:16px;color:#8B98A5;margin-top:10px;max-width:560px;text-wrap:pretty">No forms, no wallet pop-ups. Send <span style="color:#E7E9EA;font-weight:700">{{ launchFee }}</span> through X Money with your coin's configuration in the note. It goes live in seconds.</div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:32px">
+      <div class="glass-card" style="border:0;border-radius:16px;padding:22px 22px 24px;display:flex;flex-direction:column;gap:14px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#8ECDFF;color:#0F1419;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800">1</div>
+        <div style="font-size:17px;font-weight:800">Upload your image</div>
+        <div style="font-size:14px;color:#8B98A5;line-height:1.4;text-wrap:pretty">Drop a logo below. You get a Metadata URI to paste into the note.</div>
+      </div>
+      <div class="glass-card" style="border:0;border-radius:16px;padding:22px 22px 24px;display:flex;flex-direction:column;gap:14px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#8ECDFF;color:#0F1419;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800">2</div>
+        <div style="font-size:17px;font-weight:800">Write the config</div>
+        <div style="font-size:14px;color:#8B98A5;line-height:1.4;text-wrap:pretty">Only Name, Symbol, and Metadata URI. Your socials are saved with the image.</div>
+      </div>
+      <div class="glass-card" style="border:0;border-radius:16px;padding:22px 22px 24px;display:flex;flex-direction:column;gap:14px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#8ECDFF;color:#0F1419;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800">3</div>
+        <div style="font-size:17px;font-weight:800">Send {{ launchFee }} on X Money</div>
+        <div style="font-size:14px;color:#8B98A5;line-height:1.4;text-wrap:pretty">Pay <span style="color:#E7E9EA;font-weight:700;overflow-wrap:anywhere">{{ receiverHandle }}</span> with the config as the note. Done.</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;margin-top:16px">
+      <div class="glass-card" style="border:0;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:15px;font-weight:800">Image</div>
+          <div style="font-size:13px;color:#8B98A5">PNG, JPG · 1:1 · under 2 MB</div>
+        </div>
+        <label style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:200px;border:2px dashed {{ dropBorder }};border-radius:16px;background:rgba(0,0,0,.4);cursor:pointer;overflow:hidden" onDragOver="{{ onDragOver }}" onDragLeave="{{ onDragLeave }}" onDrop="{{ onDrop }}">
+          <input type="file" accept="image/*" onChange="{{ onFile }}" style="position:absolute;inset:0;opacity:0;cursor:pointer">
+          <sc-if value="{{ hasImage }}" hint-placeholder-val="{{ false }}">
+            <img src="{{ imgSrc }}" alt="" style="width:120px;height:120px;border-radius:50%;object-fit:cover;border:1px solid rgba(142,205,255,.35)">
+            <div style="font-size:13px;color:#8B98A5">{{ fileName }} · click to replace</div>
+          </sc-if>
+          <sc-if value="{{ noImage }}" hint-placeholder-val="{{ true }}">
+            <svg viewBox="0 0 24 24" width="32" height="32" fill="#8B98A5"><path d="M3 5.5C3 4.119 4.119 3 5.5 3h13C19.881 3 21 4.119 21 5.5v13c0 1.381-1.119 2.5-2.5 2.5h-13C4.119 21 3 19.881 3 18.5v-13zM5.5 5c-.276 0-.5.224-.5.5v9.086l3-3 3 3 5-5 3 3V5.5c0-.276-.224-.5-.5-.5h-13zM19 15.414l-3-3-5 5-3-3-3 3V18.5c0 .276.224.5.5.5h13c.276 0 .5-.224.5-.5v-3.086zM9.75 7C8.784 7 8 7.784 8 8.75s.784 1.75 1.75 1.75 1.75-.784 1.75-1.75S10.716 7 9.75 7z"></path></svg>
+            <div style="font-size:15px;font-weight:700">Drag an image here</div>
+            <div style="font-size:13px;color:#8B98A5">Or click to browse</div>
+          </sc-if>
+        </label>
+        <div class="glass-input" style="display:flex;align-items:center;gap:8px;height:44px;padding:0 6px 0 14px;border-radius:9999px;border:0">
+          <span style="font-size:12px;font-weight:700;color:#8B98A5;letter-spacing:.6px;flex:none">Metadata URI</span>
+          <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:{{ uriFg }}">{{ uriShown }}</span>
+          <button onClick="{{ copyUri }}" disabled="{{ notReady }}" style="height:32px;padding:0 14px;border-radius:9999px;border:0;background:{{ uriBtnBg }};color:{{ uriBtnFg }};font-size:13px;font-weight:700;cursor:pointer">{{ uriBtnLabel }}</button>
+        </div>
+      </div>
+
+      <div class="glass-card" style="border:0;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:15px;font-weight:800">Config</div>
+          <div style="font-size:13px;color:#8B98A5">Paste as the X Money note</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="glass-input" style="display:flex;align-items:center;gap:10px;height:48px;padding:0 16px;border-radius:12px;border:0">
+            <span style="width:64px;font-size:13px;font-weight:700;color:#8B98A5;flex:none">Name</span>
+            <input value="{{ name }}" onChange="{{ onName }}" placeholder="Grok Coin" maxLength="32" style="flex:1;min-width:0;background:transparent;border:0;outline:0;color:#E7E9EA;font-size:15px;font-weight:700">
+          </div>
+          <div class="glass-input" style="display:flex;align-items:center;gap:10px;height:48px;padding:0 16px;border-radius:12px;border:0">
+            <span style="width:64px;font-size:13px;font-weight:700;color:#8B98A5;flex:none">Symbol</span>
+            <input value="{{ symbol }}" onChange="{{ onSymbol }}" placeholder="GROK" maxLength="10" style="flex:1;min-width:0;background:transparent;border:0;outline:0;color:#E7E9EA;font-size:15px;font-weight:700;text-transform:uppercase">
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ socialFields }}" as="s">
+            <div class="glass-input" style="display:flex;align-items:center;gap:10px;height:48px;padding:0 16px;border-radius:12px;border:0">
+              <span style="width:64px;font-size:13px;font-weight:700;color:#8B98A5;flex:none">{{ s.label }}</span>
+              <input type="url" value="{{ s.value }}" onChange="{{ s.change }}" placeholder="{{ s.placeholder }}" maxLength="512" aria-label="{{ s.label }}" style="flex:1;min-width:0;background:transparent;border:0;outline:0;color:#E7E9EA;font-size:15px;font-weight:700">
+            </div>
+          </sc-for>
+        </div>
+        <div class="glass-input" style="border:0;border-radius:12px;padding:16px 18px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.7;display:flex;flex-direction:column">
+          <div style="display:flex;gap:8px"><span style="color:#8B98A5">Name:</span><span style="color:{{ nameFg }}">{{ nameShown }}</span></div>
+          <div style="display:flex;gap:8px"><span style="color:#8B98A5">Symbol:</span><span style="color:{{ symbolFg }}">{{ symbolShown }}</span></div>
+          <div style="display:flex;gap:8px;min-width:0"><span style="color:#8B98A5;flex:none">Metadata Uri:</span><span style="color:{{ uriFg }};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ uriShown }}</span></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:10px">
+            <sc-if value="{{ hasImage }}" hint-placeholder-val="{{ false }}"><img src="{{ imgSrc }}" alt="" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid rgba(142,205,255,.35)"></sc-if>
+            <sc-if value="{{ noImage }}" hint-placeholder-val="{{ true }}"><span class="glass-input" style="width:36px;height:36px;border-radius:50%;border:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800">{{ initial }}</span></sc-if>
+            <div style="display:flex;flex-direction:column;line-height:1.2"><span style="font-size:14px;font-weight:800">{{ previewName }}</span><span style="font-size:13px;color:#8B98A5;font-weight:700">${{ previewSymbol }}</span></div>
+          </div>
+          <button onClick="{{ copyConfig }}" disabled="{{ notReady }}" style="height:44px;padding:0 22px;border-radius:9999px;border:0;background:{{ cfgBtnBg }};color:{{ cfgBtnFg }};font-size:15px;font-weight:700;cursor:pointer">{{ cfgBtnLabel }}</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-card" style="overflow:hidden;border:0;border-radius:16px;padding:28px 32px;margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:6px;position:relative;z-index:1;min-width:0;flex:1 1 320px">
+        <div style="font-size:12px;font-weight:700;letter-spacing:1.2px;color:#8ECDFF">STEP 3</div>
+        <div style="font-size:22px;font-weight:800;letter-spacing:-0.4px;min-width:0;overflow-wrap:anywhere">Send {{ launchFee }} to {{ receiverHandle }} on X Money</div>
+        <div style="font-size:14px;color:#8B98A5">Paste the config as the note. Your coin appears under Raising once it confirms.</div>
+      </div>
+      <a href="{{ xMoneyHref }}" style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 22px;border-radius:9999px;background:#EFF3F4;color:#0F1419;font-size:15px;font-weight:700;text-decoration:none;position:relative;z-index:1" style-hover="background:#fff;text-decoration:none">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>Open X Money
+      </a>
+      <svg viewBox="0 0 24 24" width="220" height="220" fill="rgba(142,205,255,.08)" style="position:absolute;right:-30px;top:50%;transform:translateY(-50%);pointer-events:none;opacity:.5"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {name:'',symbol:'',imgSrc:null,fileName:'',uri:'',drag:false,copied:null,website:'',twitter:'',telegram:'',uploading:false,error:'',config:null,validatedKey:null,preparedUri:'',preparing:false};
+  componentDidMount() {this._alive=true;fetch(window.xlaunchApi('/api/config')).then(r=>{if(!r.ok)throw new Error('Configuration unavailable');return r.json();}).then(config=>{if(this._alive)this.setState({config});}).catch(console.error);}
+  componentWillUnmount() {this._alive=false;clearTimeout(this._t);clearTimeout(this._validateTimer);this._upload?.abort();this._validation?.abort();}
+  change(update) {
+    clearTimeout(this._validateTimer);this._validation?.abort();
+    this.setState({...update,validatedKey:null,preparedUri:'',preparing:false,copied:null,error:''},()=>{
+      if(this.state.name&&this.state.symbol&&this.state.uri&&!this.state.uploading){
+        this.setState({preparing:true});
+        this._validateTimer=setTimeout(()=>this.prepareConfig(),600);
+      }
+    });
+  }
+  async prepareConfig() {
+    const config=this.configuration(),key=JSON.stringify(config);
+    this._validation=new AbortController();const signal=this._validation.signal;
+    try {
+      const response=await fetch(window.xlaunchApi('/api/launch-config/prepare'),{method:'POST',headers:{'Content-Type':'application/json'},body:key,signal});
+      const result=await response.json();if(!response.ok)throw new Error(result.error||'Invalid configuration');
+      if(this._alive&&!signal.aborted&&key===JSON.stringify(this.configuration()))this.setState({validatedKey:key,preparedUri:result.uri,preparing:false,error:''});
+    }catch(error){if(error.name!=='AbortError'&&this._alive&&!signal.aborted)this.setState({validatedKey:null,preparedUri:'',preparing:false,error:error.message});}
+  }
+  async load(file) {
+    if(!file)return;
+    if(!['image/png','image/jpeg'].includes(file.type)||file.size>=2*1024*1024){this.setState({error:'Use a square PNG or JPG under 2 MB.'});return;}
+    this._upload?.abort();this._upload=new AbortController();const signal=this._upload.signal;
+    this.change({uploading:true,uri:'',imgSrc:null,fileName:file.name});
+    try {
+      const response=await fetch(window.xlaunchApi('/api/images'),{method:'POST',headers:{'Content-Type':file.type},body:file,signal});
+      const result=await response.json();if(!response.ok)throw new Error(result.error||'Upload failed');
+      if(this._alive&&!signal.aborted)this.change({imgSrc:window.xlaunchApi(result.preview_url),uri:result.uri,uploading:false});
+    } catch(error) {if(error.name!=='AbortError'&&this._alive)this.setState({uploading:false,error:error.message});}
+  }
+  flash(k) {this.setState({copied:k});clearTimeout(this._t);this._t=setTimeout(()=>this.setState({copied:null}),1500);}
+  async copy(text,k) {try{await window.xlaunchCopy(text);this.flash(k);}catch(error){this.setState({error:error.message});}}
+  configuration() {return {name:this.state.name,symbol:this.state.symbol.toUpperCase(),image_uri:this.state.uri,socials:{website:this.state.website.trim(),twitter:this.state.twitter.trim(),telegram:this.state.telegram.trim()}};}
+  copyConfig() {
+    const config=this.configuration();
+    if(this.state.validatedKey!==JSON.stringify(config))return;
+    const note=`Name: ${config.name}\nSymbol: ${config.symbol}\nMetadata Uri: ${this.state.preparedUri}`;
+    // Copy directly in the click handler, with no network await before clipboard access.
+    this.copy(note,'cfg');
+  }
+  renderVals() {
+    const {name,symbol,imgSrc,fileName,uri,drag,copied,uploading,error,website,twitter,telegram,config,preparedUri,preparing}=this.state;
+    const sym=symbol.toUpperCase(),hasImage=!!imgSrc,ready=!!(name&&sym&&preparedUri&&!uploading&&this.state.validatedKey===JSON.stringify(this.configuration()));
+    const socialFields=[['website','Website','https://your-site.com'],['twitter','X','https://x.com/yourcoin'],['telegram','Telegram','https://t.me/yourcoin']].map(([key,label,placeholder])=>({key,label,placeholder,value:this.state[key],change:e=>this.change({[key]:e.target.value})}));
+    return {...window.xlaunchSiteLinks(config),xMoneyHref:window.xlaunchApi('/go/x-money'),launchFee:config?'$'+(config.launch_fee_cents/100).toLocaleString(undefined,{maximumFractionDigits:2}):'…',name,symbol:sym,imgSrc,fileName,hasImage,noImage:!hasImage,notReady:!ready,initial:(sym||name||'?')[0].toUpperCase(),previewName:name||'Your coin',previewSymbol:sym||'TICKER',nameShown:name||'{Name}',symbolShown:sym||'{Symbol}',uriShown:error||(uploading?'Uploading…':preparing?'Saving image and socials…':preparedUri||(hasImage?'Enter name and symbol':'{metadata_uri}')),nameFg:name?'#E7E9EA':'#6B7A88',symbolFg:sym?'#E7E9EA':'#6B7A88',uriFg:preparedUri?'#E7E9EA':'#6B7A88',dropBorder:drag?'#8ECDFF':'rgba(142,205,255,.25)',uriBtnLabel:copied==='uri'?'Copied':'Copy',uriBtnBg:ready?'#EFF3F4':'rgba(142,205,255,.08)',uriBtnFg:ready?'#0F1419':'#8B98A5',cfgBtnLabel:copied==='cfg'?'Copied':uploading?'Uploading…':preparing?'Saving…':'Copy Config',cfgBtnBg:ready?'#8ECDFF':'rgba(142,205,255,.08)',cfgBtnFg:ready?'#0F1419':'#8B98A5',onName:e=>this.change({name:e.target.value}),onSymbol:e=>this.change({symbol:e.target.value.replace(/[^a-z0-9]/gi,'')}),onFile:e=>this.load(e.target.files?.[0]),onDragOver:e=>{e.preventDefault();if(!drag)this.setState({drag:true});},onDragLeave:()=>this.setState({drag:false}),onDrop:e=>{e.preventDefault();this.setState({drag:false});this.load(e.dataTransfer.files?.[0]);},copyUri:()=>{if(ready)this.copy(preparedUri,'uri');},copyConfig:()=>this.copyConfig(),socialFields,website,twitter,telegram,hasWebsite:!!website,hasTwitter:!!twitter,hasTelegram:!!telegram,receiverHandle:window.xlaunchSiteLinks(config).receiverHandle,openMoney:()=>{if(config?.x_money_url)window.location.assign(config.x_money_url);else this.setState({error:'The X Money destination has not been configured yet.'});}};
+  }
+}
+
+</script>
+</body>
+</html>

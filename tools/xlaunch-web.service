@@ -1,0 +1,18 @@
+# Example installation; configure /etc/xlaunch.env before enabling.
+[Unit]
+Description=XLaunch frontend and cached Rust API
+After=network-online.target xlaunch-capture-ingest.service
+Wants=network-online.target
+
+[Service]
+Type=exec
+WorkingDirectory=/opt/xlaunch
+EnvironmentFile=/etc/xlaunch.env
+ExecStart=/opt/xlaunch/target/release/launchpad ${WEB_BIND_ADDRESS} ${INDEXER_DATA_DIR}/state.json ${LAUNCHPAD_DATA_DIR} frontend frontend-api frontend-vendor
+Restart=on-failure
+RestartSec=3
+UMask=0077
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,22 @@
+# Publishes the local API through a Cloudflare tunnel, so the backend is
+# reachable over HTTPS without opening a port to the internet.
+# The mode is chosen by /etc/xlaunch-api-tunnel.env, which supplies the
+# arguments: a named tunnel on your own hostname, or a quick tunnel whose
+# hostname is assigned by Cloudflare and changes on every restart.
+# See docs/deployment.md.
+[Unit]
+Description=XLaunch API Cloudflare tunnel
+After=network-online.target xlaunch-web.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/xlaunch-api-tunnel.env
+ExecStart=/usr/local/bin/cloudflared --no-autoupdate $CLOUDFLARED_TUNNEL_ARGS
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

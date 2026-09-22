@@ -1,0 +1,17 @@
+# Example installation; configure /etc/xlaunch.env before enabling.
+[Unit]
+Description=XLaunch X Money payment receiver
+After=network.target
+
+[Service]
+Type=exec
+WorkingDirectory=/opt/xlaunch
+EnvironmentFile=/etc/xlaunch.env
+ExecStart=/opt/xlaunch/target/release/capture_ingest ${INDEXER_BIND_ADDRESS} ${INDEXER_DATA_DIR}
+Restart=on-failure
+RestartSec=3
+UMask=0077
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

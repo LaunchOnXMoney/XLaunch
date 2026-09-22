@@ -1,0 +1,54 @@
+[package]
+name = "xlaunch"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+anyhow = "1"
+axum = "=0.8.9"
+axum-server = "=0.8.0"
+anchor-lang = "=1.0.2"
+anchor-spl = "=1.0.2"
+# Keep the macro/runtime set aligned with pump-rust-client's published lockfile.
+anchor-attribute-access-control = "=1.0.2"
+anchor-attribute-account = "=1.0.2"
+anchor-attribute-constant = "=1.0.2"
+anchor-attribute-error = "=1.0.2"
+anchor-attribute-event = "=1.0.2"
+anchor-attribute-program = "=1.0.2"
+anchor-derive-accounts = "=1.0.2"
+anchor-derive-serde = "=1.0.2"
+anchor-derive-space = "=1.0.2"
+anchor-syn = "=1.0.2"
+base64 = "0.22"
+bincode = "1.3"
+bs58 = "=0.5.1"
+chrono = "=0.4.45"
+futures-util = "0.3"
+helius = { version = "=3.0.0", default-features = false, features = ["rustls"] }
+image = { version = "=0.25.10", default-features = false, features = ["png", "jpeg"] }
+lru = "=0.18.2"
+reqwest = { version = "=0.12.28", default-features = false, features = ["json", "multipart", "rustls-tls"] }
+regex = "=1.13.1"
+pump-rust-client = { version = "=0.1.13", default-features = false }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["arbitrary_precision"] }
+sha2 = "0.10"
+tempfile = "3"
+solana-sdk = "=4.0.1"
+solana-commitment-config = "=3.1.1"
+solana-compute-budget-interface = "=3.0.0"
+solana-system-interface = { version = "=2.0.0", features = ["bincode"] }
+solana-rpc-client-api = "=4.2.1"
+solana-transaction-status-client-types = "=4.2.1"
+solana-address-lookup-table-interface = { version = "=3.1.0", features = ["bincode", "bytemuck"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "signal", "time"] }
+tokio-tungstenite = "=0.28.0"
+url = "=2.5.8"
+
+[profile.dev]
+debug = 0
+
+[profile.test]
+debug = 0

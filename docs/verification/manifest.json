@@ -1,0 +1,93 @@
+{
+  "verified_date": "2026-09-21",
+  "cluster": "mainnet",
+  "docs_commit": "81091419e4457566469d4e2a27f64ed84d42419c",
+  "global_address": "4wTV1YmiEkRvAtNtsSGPtUrqRYQMe5SKy2uB4Jjaxnjf",
+  "program_address": "6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P",
+  "quote_mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+  "commitment": "finalized",
+  "base_token_decimals": 6,
+  "files": {
+    "pump-idl.json": {
+      "url": "https://raw.githubusercontent.com/pump-fun/pump-public-docs/81091419e4457566469d4e2a27f64ed84d42419c/idl/pump.json",
+      "sha256": "ffe966c42f1af41652ee753fe2f1e3f7cd4077d7e6f49faf3138959c8b56064b"
+    },
+    "pump-global.rpc.json": {
+      "url": "https://api.mainnet.solana.com",
+      "sha256": "653832dae95ccdff9cad562b8cc5f4464f242764e662547a99a6e4c2c8aa9975"
+    },
+    "usdc-mint.rpc.json": {
+      "url": "https://api.mainnet.solana.com",
+      "sha256": "06a28006feed1c7cdc29813b19533b3d771ebdba7c6455cdbc7aeed7a2ae1baf"
+    },
+    "pump-fees.rpc.json": {
+      "url": "https://api.mainnet.solana.com",
+      "sha256": "9710d1adb22b5fc634fd0d8fc5722184399a1ac139acef0b0d48abcf9a41a111"
+    },
+    "pump-fees-idl.json": {
+      "url": "https://raw.githubusercontent.com/pump-fun/pump-public-docs/81091419e4457566469d4e2a27f64ed84d42419c/idl/pump_fees.json",
+      "sha256": "d87b52305fd6b2ec487d4ba1e08a49990c23fa9b8b76092b2097df0164fa3859"
+    },
+    "sdk-reference.json": {
+      "url": "https://registry.npmjs.org/@pump-fun/pump-sdk/-/pump-sdk-2.0.0.tgz",
+      "sha256": "fa0e18a21c90bec6b36661d9430b4c8bd0a1d63fb1aecfd4b82915d9be16716d"
+    },
+    "create-buy.review.json": {
+      "url": "https://api.mainnet.solana.com",
+      "sha256": "74a630f2a19dfb5432de7c154fcf0fa6df91d52be32f0b985d44e51d9f990ad1"
+    },
+    "create-buy.simulation.json": {
+      "url": "https://api.mainnet.solana.com",
+      "sha256": "f9540faf4986b235fc406d0b9919dc105b6f0b037595c98859e85ec88340d408"
+    },
+    "airdrop.review.json": {
+      "url": "https://api.mainnet.solana.com",
+      "sha256": "28baeb4a9aafb55dfffa8efc4824586500fc5b05330e5e1a4b41546b032e82c9"
+    },
+    "airdrop.simulation.json": {
+      "url": "https://api.mainnet.solana.com",
+      "sha256": "5cbe2bc0d309c3656d80da4c1e81922f36af6db90c83a1a044794e1725f50939"
+    }
+  },
+  "sdk": {
+    "name": "@pump-fun/pump-sdk",
+    "version": "2.0.0",
+    "tarball": "https://registry.npmjs.org/@pump-fun/pump-sdk/-/pump-sdk-2.0.0.tgz",
+    "integrity": "sha512-qDtUx/1eHJl4uMof3bxTJ/YqKNp+HtXoIWfmOArQD11Vp+Zb0AZHLod0ktii7tc3uAwRtg1GoteouT0ynM58YQ==",
+    "inspected_sources": {
+      "bondingCurve.ts": "d2fbace84bb0c7167e37412aa1b2050c0d460eda5717547845cfae1a17a9e024",
+      "fees.ts": "3454e498fd65c0eec28c3afdd7a3ce145780995a2309fc713987e45ff13ff6bd"
+    }
+  },
+  "sources": {
+    "coin_creation": "https://github.com/pump-fun/pump-public-docs/blob/81091419e4457566469d4e2a27f64ed84d42419c/docs/instructions/COIN_CREATION.md",
+    "pump_global_documentation": "https://github.com/pump-fun/pump-public-docs/blob/81091419e4457566469d4e2a27f64ed84d42419c/docs/PUMP_PROGRAM_README.md",
+    "circle_usdc": "https://developers.circle.com/stablecoins/usdc-contract-addresses",
+    "x_api_index": "https://docs.x.com/x-api/llms.txt",
+    "x_enterprise_index": "https://docs.x.com/enterprise-api/llms.txt",
+    "x_account_activity": "https://docs.x.com/x-api/account-activity/introduction",
+    "x_activity": "https://docs.x.com/x-api/activity/introduction",
+    "rpc_method": "https://solana.com/docs/rpc/http/getaccountinfo",
+    "rpc_endpoint": "https://solana.com/docs/references/clusters",
+    "borsh": "https://borsh.io/",
+    "anchor_accounts": "https://www.anchor-lang.com/docs/basics/program-structure",
+    "base58": "https://raw.githubusercontent.com/keis/base58/master/base58/__init__.py"
+  },
+  "fee_config_address": "8Wf5TiAheLUqBrKXeYg2JtAFFMWtKdG2BSFgqUcPVwTt",
+  "rust": {
+    "pump-rust-client": "0.1.13",
+    "helius": "3.0.0",
+    "anchor_runtime_and_macros": "1.0.2",
+    "solana-sdk": "4.0.1",
+    "cargo_lock": "../../Cargo.lock"
+  },
+  "simulation": {
+    "slots": [
+      449208142
+    ],
+    "signature_verification": false,
+    "blockhash_replacement": true,
+    "broadcast": false,
+    "public_simulated_buyer": "62qc2CNXwrYqQScmEdiZFFAnJR262PxWEuNQtxfafNgV"
+  }
+}
